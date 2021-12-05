@@ -22,20 +22,14 @@ agc = KwsAgc(KwsAgcParams())
 
 with open(args.input_file, 'rb') as h:
     _pcm = np.fromfile(h, dtype=np.int16)
-print(_pcm[:10])
-print(len(_pcm))
+
 out_pcm = agc(_pcm, rate=16000)
+# out_pcm.astype('int16').tofile('data/agc_test_float.res.raw')
 
 with open(args.test_file, 'rb') as h:
     _pcm_origin = np.fromfile(h, dtype=np.int16)
-    print(_pcm_origin[:10])
-    print(len(_pcm_origin))
     # FIXME: case problem with float
     assert((out_pcm - _pcm_origin).sum() == 0.0)
-
-print("output data: ")
-for el in out_pcm:
-    print(el)
 
 print ("PASSED")
 
